@@ -2,13 +2,13 @@ import { NEXT_PUBLIC_URL } from '@/app/config';
 import { FrameRequest, getFrameHtmlResponse, getFrameMessage } from '@coinbase/onchainkit';
 import { NextRequest, NextResponse } from 'next/server';
 import { bundlerActions, createSmartAccountClient } from 'permissionless';
-import { privateKeyToSafeSmartAccount } from 'permissionless/accounts';
+import { privateKeyToBiconomySmartAccount } from 'permissionless/accounts';
 import { pimlicoBundlerActions } from 'permissionless/actions/pimlico';
 import { createPimlicoPaymasterClient } from 'permissionless/clients/pimlico';
 import { Address, createPublicClient, http } from 'viem';
 import { sepolia } from 'viem/chains';
 
-
+let i: bigint = 1n;
 const privateKey = process.env.PRIVATE_KEY!;
 const apiKey = process.env.PIMLICO_API_KEY!;
 const paymasterUrl = `https://api.pimlico.io/v2/sepolia/rpc?apikey=${apiKey}`
@@ -37,11 +37,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const accountAddress = message.interactor.verified_accounts[0] as Address;
 
     // send transaction
-    const account = await privateKeyToSafeSmartAccount(publicClient, {
+    const account = await privateKeyToBiconomySmartAccount(publicClient, {
         privateKey: privateKey as Address,
-        safeVersion: "1.4.1", // simple version
         entryPoint: "0x5FF137D4b0FDCD49DcA30c7CF57E578a026d2789", // global entrypoint
-        saltNonce: BigInt(message.interactor.fid)
+        index: i++
     })
 
     const smartAccountClient = createSmartAccountClient({
