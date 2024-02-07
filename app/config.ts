@@ -1,1 +1,1 @@
-export const NEXT_PUBLIC_URL = 'https://frame-template.pimlico.io';
+export const NEXT_PUBLIC_URL = 'https://smart-account-frame-template-khaki.vercel.app/';
